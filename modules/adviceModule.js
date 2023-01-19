@@ -1,7 +1,10 @@
 const mongoose = require('./connection')
 
 const AdviceSchema = new mongoose.Schema({
-  userId: String
+  advice: String,
+  userId: String,
+
+  owner: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
 })
 
 const Advice = mongoose.model('Advice', AdviceSchema)

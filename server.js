@@ -3,12 +3,15 @@ const express = require('express')
 const app = express()
 const port = 6000
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 
 const User = require('./modules/userModule')
 const Advice = require('./modules/adviceModule')
 const bodyparser = require('body-parser')
 
 app.use(bodyparser.json())
+
+// Authentication
 
 app.post('/signup', async (req, res) => {
   if (!req.body.username || !req.body.password) {
@@ -33,10 +36,34 @@ app.post('/signup', async (req, res) => {
       })
     }
   }
-  console.log(req.body)
 })
 
-app.post('/login')
+app.post('/login', async (req, res) => {
+  let user = await User.findOne({ username: req.body.username })
+  if (user) {
+    bcrypt.compare(req.body.password, user.password, function (err, result) {
+      if (result) {
+        let token = jwt.sign({ id: user._id }, 'secret')
+        res.send({ token })
+      } else {
+        res.send({ message: 'Incorrect password' })
+      }
+    })
+  } else {
+    res.send({ message: 'Incorrect username' })
+  }
+})
+
+app.post('/verify', async (req, res) => {
+  jwt.verify(req.body.token, 'secret', async (err, payload) => {
+    if (payload) {
+      let user = await User.findOne({ _id: payload.id })
+      res.send(user)
+    } else {
+      res.send({ message: 'session expired' })
+    }
+  })
+})
 
 app.listen(port, () => {
   console.log(`server is connected on port : ${port} `)
