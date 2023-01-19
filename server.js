@@ -8,6 +8,13 @@ const jwt = require('jsonwebtoken')
 const User = require('./modules/userModule')
 const Advice = require('./modules/adviceModule')
 const bodyparser = require('body-parser')
+const cors = require('cors')
+
+app.use(
+  cors({
+    origin: '*'
+  })
+)
 
 app.use(bodyparser.json())
 
@@ -63,6 +70,25 @@ app.post('/verify', async (req, res) => {
       res.send({ message: 'session expired' })
     }
   })
+})
+
+app.post('/advice', async (req, res) => {
+  let newAdvice = new Advice({
+    advice: req.body.advice,
+    userId: req.body.userId
+  })
+  await newAdvice.save()
+  res.send({ message: true })
+})
+
+app.get('/advice/:id', async (req, res) => {
+  let advices = await Advice.find({ userId: req.params.userId })
+  res.send({ list: advices })
+})
+
+app.delete('/advice/:id', async (req, res) => {
+  await Advice.delete({ _id: req.params.id })
+  res.send({ message: true })
 })
 
 app.listen(port, () => {
