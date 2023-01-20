@@ -1,7 +1,7 @@
 const express = require('express')
 // const mongoose = require('mongoose')
 const app = express()
-const port = 6000
+const port = 3636
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
@@ -82,12 +82,12 @@ app.post('/advice', async (req, res) => {
 })
 
 app.get('/advice/:id', async (req, res) => {
-  let advices = await Advice.find({ userId: req.params.userId })
+  let advices = await Advice.find({ userId: req.params.id })
   res.send({ list: advices })
 })
 
 app.delete('/advice/:id', async (req, res) => {
-  await Advice.delete({ _id: req.params.id })
+  await Advice.findOneAndDelete({ _id: req.params.id })
   res.send({ message: true })
 })
 
