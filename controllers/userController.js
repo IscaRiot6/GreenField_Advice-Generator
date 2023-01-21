@@ -2,6 +2,8 @@ const User = require('../modules/userModule')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
+// const validator = require('validator')
+
 const userSignup = async (req, res) => {
   if (!req.body.username || !req.body.password) {
     res.send({ message: 'Please fill-in the correct data' })
@@ -11,6 +13,14 @@ const userSignup = async (req, res) => {
       res.send({ message: 'This user already exists' })
     } else {
       bcrypt.hash(req.body.password, 10, async (err, hash) => {
+        //validation
+        // if (!username || !password) {
+        //   throw Error('All fields must be field')
+        // }
+        // if (!validator.isStrongPassword(password)) {
+        //   throw Error('Password is not strong enough')
+        // }
+
         if (hash) {
           let newUser = new User({
             username: req.body.username,

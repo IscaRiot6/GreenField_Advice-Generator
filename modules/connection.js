@@ -1,4 +1,6 @@
 const mongoose = require('mongoose')
+const dotenv = require('dotenv')
+dotenv.config()
 
 main()
   .catch(err => console.log(err))
@@ -6,9 +8,7 @@ main()
 
 async function main () {
   mongoose.set('strictQuery', false)
-  await mongoose.connect(
-    'mongodb+srv://Isca:Isca12345@cluster0.cz4fbfv.mongodb.net/greenfield-adviceGenerator?retryWrites=true&w=majority'
-  )
+  await mongoose.connect(process.env.MONGO_URI)
 }
 
 module.exports = mongoose
