@@ -5,6 +5,14 @@ const port = 3636
 
 const userRoute = require('./routes/userRoute')
 const adviceRoute = require('./routes/adviceRoute')
+const dotenv = require('dotenv')
+dotenv.config()
+
+// console.log(process.env.MONGO_URI)
+
+const morgan = require('morgan')
+
+app.use(morgan('tiny'))
 
 const bodyparser = require('body-parser')
 const cors = require('cors')
