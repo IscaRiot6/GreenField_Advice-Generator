@@ -6,8 +6,6 @@ const port = 3636
 const userRoute = require('./routes/userRoute')
 const adviceRoute = require('./routes/adviceRoute')
 
-// const User = require('./modules/userModule')
-// const Advice = require('./modules/adviceModule')
 const bodyparser = require('body-parser')
 const cors = require('cors')
 
